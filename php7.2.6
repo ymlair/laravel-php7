@@ -1,11 +1,16 @@
 FROM php:7-alpine3.7
 
-RUN apk --no-cache add  git openssh openssl zlib-dev
+RUN apk add  --no-cache --virtual .build-deps \
+    git \
+    openssh \ 
+    openssl \
+    zlib-dev \
+    libpng-dev
 
 RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  && echo "date.timezone=${PHP_TIMEZONE:-UTC}" > "$PHP_INI_DIR/conf.d/date_timezone.ini"
 
-RUN docker-php-ext-install zip
+RUN docker-php-ext-install zip gd
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /tmp
@@ -22,12 +27,8 @@ RUN curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/compos
     }" \
  && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
  && composer --ansi --version --no-interaction \
- && rm -rf /tmp/* /tmp/.htaccess
+ && rm -rf /tmp/* /tmp/.htaccess \
+ && apk del .build-deps
 
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-
-WORKDIR /app
-
-ENTRYPOINT ["/docker-entrypoint.sh"]
-
-CMD ["composer"]
+EXPOSE 9000
+CMD ["php-fpm"]

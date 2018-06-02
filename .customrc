@@ -1,0 +1,26 @@
+# Add Comman Z jump dir
+/Users/jiayu/.oh-my-zsh/lib/z
+
+# set docker env
+#eval $(docker-machine env default) 
+
+
+alias biu='echo oMOrtUy5dcEGw3k6 | pbcopy && ssh -p9933 -i /Users/jiayu/.ssh/yiming.zhang.pem yiming.zhang@180.150.184.115'
+alias kan='docker exec -it '
+
+#nginx
+alias gonginx='docker exec -it docker_nginx_1 ash'
+alias nginx='docker exec -it docker_nginx_1 nginx'
+
+#php
+alias gophp='docker exec -it docker_php_1 ash'
+alias php7='docker exec -it docker_php_1 php'
+alias composer='docker exec -it docker_php_1 composer'
+
+#redis
+alias goredis='docker exec -it docker_redis_1 ash'
+alias redis-cli='docker exec -it docker_redis_1 redis-cli'
+
+#mysql
+alias gomysql='docker exec -it docker_mysql_1 bash'
+alias mysql='docker exec -it docker_mysql_1 mysql'

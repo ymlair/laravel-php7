@@ -17,7 +17,10 @@ ENV PHPIZE_DEPS \
 		libc-dev \
 		make \
 		pkgconf \
+		bzip2-dev \
 		re2c
+
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
 
 RUN apk add --no-cache git openssh
 # persistent / runtime deps
@@ -140,6 +143,10 @@ RUN set -xe \
 		--with-openssl \
 		--with-zlib \
 		--with-gd \
+		--with-bz2 \
+		--enable-bcmath \
+		--with-pdo-mysql=mysqlnd \
+		--enable-opcache \
 		\
 # bundled pcre does not support JIT on s390x
 # https://manpages.debian.org/stretch/libpcre3-dev/pcrejit.3.en.html#AVAILABILITY_OF_JIT_SUPPORT

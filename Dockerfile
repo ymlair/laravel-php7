@@ -134,6 +134,7 @@ RUN set -xe \
 		--enable-mbstring \
 # --enable-mysqlnd is included here because it's harder to compile after the fact than extensions are (since it's a plugin for several extensions, not an extension in itself)
 		--enable-mysqlnd \
+		--with-pdo-mysql \
 		--enable-zip \
 # https://wiki.php.net/rfc/libsodium
 		--with-sodium=shared \
@@ -145,7 +146,6 @@ RUN set -xe \
 		--with-gd \
 		--with-bz2 \
 		--enable-bcmath \
-		--with-pdo-mysql=mysqlnd \
 		--enable-opcache \
 		\
 # bundled pcre does not support JIT on s390x
@@ -170,6 +170,7 @@ RUN set -xe \
 	\
 # https://github.com/docker-library/php/issues/443
 	&& pecl install xdebug \
+	&& pecl install mongo \
 	&& pecl update-channels \
 	&& apk del .build-deps \
 	\
@@ -235,6 +236,7 @@ RUN curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/compos
     }" \
  && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
  && composer --ansi --version --no-interaction \
+ && composer config -g repo.packagist composer https://packagist.phpcomposer.com \
  && rm -rf /tmp/* /tmp/.htaccess 
 
 EXPOSE 9000
